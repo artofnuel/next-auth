@@ -9,18 +9,15 @@ const Header = () => {
           <h1 className="font-bold text-3xl">Next.Auth</h1>
         </Link>
         <ul className="flex gap-4">
-          {/* <Link href="/login">Login</Link> */}
-          {/* <Link
-            href="/sign-up"
-            className="p-2 px-8 rounded-md bg-black/90 text-white"
-          >
-            Register
-          </Link> */}
           <SignedIn>
-            <SignInButton />
+            <li>
+              <UserButton />
+            </li>
           </SignedIn>
           <SignedOut>
-            <UserButton />
+            <li>
+              <SignInButton />
+            </li>
           </SignedOut>
         </ul>
       </nav>
