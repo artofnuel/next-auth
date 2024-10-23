@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema(
   {
     clerkId: {
-      type: stringify,
+      type: String,
       required: true,
       unique: true,
     },
