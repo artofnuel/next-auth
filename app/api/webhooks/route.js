@@ -1,7 +1,7 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 
-export async function POST() {
+export async function POST(req) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
@@ -24,8 +24,8 @@ export async function POST() {
     });
   }
 
-  // Get the body
-  const payload = await req.json();
+  // Get the body from the request object
+  const payload = await req.json(); // Use 'req' passed into the POST function
   const body = JSON.stringify(payload);
 
   // Create a new Svix instance with your secret.
@@ -47,15 +47,14 @@ export async function POST() {
     });
   }
 
-  // Do something with the payload
-  // For this guide, you simply log the payload to the console
+  // Handle the event payload
   const { id } = evt.data;
   const eventType = evt.type;
-  console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
+  console.log(`Webhook with ID: ${id} and type: ${eventType}`);
   console.log("Webhook body:", body);
 
   if (eventType === "user.created" || eventType === "user.updated") {
-    const { id, first_name, last_name, image_url, email_addresses } = evt?.data;
+    const { id, first_name, last_name, image_url, email_addresses } = evt.data;
 
     try {
       await createOrUpdateUser(
@@ -68,14 +67,8 @@ export async function POST() {
       return new Response("User is created", { status: 200 });
     } catch (error) {
       console.log("Error creating or updating user:", error);
-      return new Response("Error occured", {
-        status: 400,
-      });
+      return new Response("Error occured", { status: 400 });
     }
-
-    console.log(
-      `User created with ID: ${id}, email: ${email_addresses[0].email_address}, and username: ${username}`
-    );
   }
 
   if (eventType === "user.deleted") {
@@ -85,9 +78,7 @@ export async function POST() {
       return new Response("User is deleted", { status: 200 });
     } catch (error) {
       console.log("Error deleting user:", error);
-      return new Response("Error occured", {
-        status: 400,
-      });
+      return new Response("Error occured", { status: 400 });
     }
   }
 
