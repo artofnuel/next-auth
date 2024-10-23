@@ -16,7 +16,7 @@ export const connect = async () => {
 
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
-      dbName: "next auth app",
+      dbName: "emmanuel-auth-app",
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
