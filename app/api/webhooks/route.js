@@ -54,11 +54,41 @@ export async function POST() {
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
   console.log("Webhook body:", body);
 
-  if (eventType === "user.created") {
-    const { id, email_addresses, username } = evt.data;
+  if (eventType === "user.created" || eventType === "user.updated") {
+    const { id, first_name, last_name, image_url, email_addresses } = evt?.data;
+
+    try {
+      await createOrUpdateUser(
+        id,
+        email_addresses,
+        first_name,
+        last_name,
+        image_url
+      );
+      return new Response("User is created", { status: 200 });
+    } catch (error) {
+      console.log("Error creating or updating user:", error);
+      return new Response("Error occured", {
+        status: 400,
+      });
+    }
+
     console.log(
       `User created with ID: ${id}, email: ${email_addresses[0].email_address}, and username: ${username}`
     );
+  }
+
+  if (eventType === "user.deleted") {
+    const { id } = evt.data;
+    try {
+      await deleteUser(id);
+      return new Response("User is deleted", { status: 200 });
+    } catch (error) {
+      console.log("Error deleting user:", error);
+      return new Response("Error occured", {
+        status: 400,
+      });
+    }
   }
 
   return new Response("", { status: 200 });

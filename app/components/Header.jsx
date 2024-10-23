@@ -10,14 +10,10 @@ const Header = () => {
         </Link>
         <ul className="flex gap-4">
           <SignedIn>
-            <li>
-              <UserButton />
-            </li>
+            <UserButton />
           </SignedIn>
           <SignedOut>
-            <li>
-              <SignInButton />
-            </li>
+            <SignInButton />
           </SignedOut>
         </ul>
       </nav>
